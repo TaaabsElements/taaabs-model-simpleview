@@ -1,0 +1,31 @@
+{
+  "name": "taaabs-model-simpleview",
+  "version": "0.1.0",
+  "description": "A graphical component that displays some informations of a model.",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "taaabs"
+  ],
+  "authors": [
+    "Rémi Casado"
+  ],
+  "repository": {
+   "type": "git",
+   "url": "https://github.com/TaaabsElements/taaabs-model-simpleview.git"
+  },
+  "main": "taaabs-model-simpleview.html",
+  "license": "https://github.com/TaaabsElements/taaabs-model-simpleview/LICENSE",
+  "dependencies": {
+    "polymer": "polymer/polymer#^1.0.0",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior",
+    "iron-pages": "PolymerElements/iron-collapse",
+    "iron-pages": "PolymerElements/iron-icons",
+    "taaabs-themes":"TaaabsElements/taaabs-themes"
+  },
+  "devDependencies": {
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "ignore": []
+}
