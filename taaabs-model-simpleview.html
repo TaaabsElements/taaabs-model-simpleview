@@ -13,8 +13,13 @@
       :host .title {
         border: solid 1px gray;
         padding: 5px;
-        cursor: pointer;
         font-size: 20px;
+
+        -webkit-transition: color, background-color .2s ease-in-out;
+        -moz-transition: color, background-color .2s ease-in-out;
+        -ms-transition: color, background-color .2s ease-in-out;
+        -o-transition: color, background-color .2s ease-in-out;
+        transition: color, background-color .2s ease-in-out;
       }
 
       :host .content {
@@ -22,18 +27,32 @@
         padding: 5px;
       }
 
+      :host .content div {
+        padding: 5px;
+      }
+
       :host .content div:nth-child(2n+1) {
         background-color: rgba(144, 144, 144, 0.25);
-        padding: 3px;
       }
 
       :host iron-icon {
         float: right;
+        cursor: pointer;
+      }
+
+      :host .tinyIcon {
+        height: 20px;
+      }
+
+      :host .childOf {
+        padding-left: 20px;
+        font-size: 11px;
+        cursor: pointer;
       }
     </style>
     <template is="dom-repeat" items="[[_typesWithAttr]]">
       <div id="t_[[index]]" class="title">
-        [[item.id]]
+        [[item.id]] <span class="childOf fgDarkBlueH" on-click="_onChildOfClick" on-mouseenter="_onChildOfEnter" on-mouseleave="_onChildOfLeave" >[[item.parentS]]</span>
         <iron-icon icon="icons:arrow-drop-down" on-click="_onCollapseClick"></iron-icon>
       </div>
       <iron-collapse id="ic_[[index]]">
@@ -87,13 +106,18 @@
         this.set('_typesWithAttr', []);
         var types = this.model.list_type_obsels;
         var attributes = this.model.list_type_attributes;
+
+        var tmp_array = [];
+
         // List every type and their attributes
         for (var i = 0; i < types.length; i++) {
           var typeId = types[i]['@id'];
           var tmp_type_with_attr = {
             'id': typeId,
-            'attrList': []
+            'attrList': [],
           };
+          if (types[i].hasSuperObselType)
+            tmp_type_with_attr.parent = types[i].hasSuperObselType[0];
           // List all the attributes of this type
           for (var j = 0; j < attributes.length; j++) {
             for (var k = 0; k < attributes[j].hasAttributeObselType.length; k++) {
@@ -102,8 +126,35 @@
               }
             }
           }
-          this.push('_typesWithAttr', tmp_type_with_attr);
+          tmp_array.push(tmp_type_with_attr);
         }
+
+        var tree = [];
+        var k = 0;
+        var max = tmp_array.length;
+        while (max > 0 && k < 1000) {
+          i = 0;
+          while (i < max) {
+            if (!tmp_array[i].parent) {
+              tree.push(tmp_array[i]);
+              tmp_array.splice(i, 1);
+              max = tmp_array.length;
+            } else {
+              for (var j = 0; j < tree.length; j++) {
+                if (i < max && tree[j].id === tmp_array[i].parent) {
+                  tmp_array[i].parentS = 'child of '+tmp_array[i].parent;
+                  tree.splice(j, 0, tmp_array[i]);
+                  tmp_array.splice(i, 1);
+                  max = tmp_array.length;
+                }
+              }
+            }
+            i++;
+          }
+          k++;
+        }
+        tree.reverse();
+        this.set('_typesWithAttr', tree);
       },
 
       addSelectionEvent: function(name, iconName, callback) {
@@ -117,7 +168,7 @@
           });
         };
 
-        var eventFunction2 = function(indexType, indexAttr, evt){
+        var eventFunction2 = function(indexType, indexAttr, evt) {
           callback(evt, {
             'obj': 'attribute',
             'name': this._typesWithAttr[indexType].attrList[indexAttr]
@@ -142,10 +193,11 @@
           var divs = [];
           for (j = 0; j < divs_tmp.length; j++)
             if (divs_tmp[j].nodeName === 'DIV') divs.push(divs_tmp[j]);
-          // Set the event for each attribute of the curren type
-          for(j = 0; j < this._typesWithAttr[i].attrList.length; j++){
+            // Set the event for each attribute of the curren type
+          for (j = 0; j < this._typesWithAttr[i].attrList.length; j++) {
             icon = document.createElement('iron-icon');
             icon.icon = iconName;
+            icon.classList.add('tinyIcon');
             icon.addEventListener('click', eventFunction2.bind(this, i, j));
             divs[j].appendChild(icon);
           }
@@ -173,6 +225,45 @@
 
         console.log(divs);
 
+      },
+
+      _onChildOfEnter: function(evt){
+        var item = evt.model.item;
+        var i = 0;
+        while(i < this._typesWithAttr.length){
+          if(this._typesWithAttr[i].id === item.parent){
+            var id = '#t_'+i;
+            this.$$(id).classList.add('bgDarkBlue','fgWhite');
+            i = this._typesWithAttr.length;
+          }
+          i++;
+        }
+      },
+
+      _onChildOfLeave: function(evt){
+        var item = evt.model.item;
+        var i = 0;
+        while(i < this._typesWithAttr.length){
+          if(this._typesWithAttr[i].id === item.parent){
+            var id = '#t_'+i;
+            this.$$(id).classList.remove('bgDarkBlue','fgWhite');
+            i = this._typesWithAttr.length;
+          }
+          i++;
+        }
+      },
+
+      _onChildOfClick: function(evt){
+        var item = evt.model.item;
+        var i = 0;
+        while(i < this._typesWithAttr.length){
+          if(this._typesWithAttr[i].id === item.parent){
+            var id = '#ic_' + i;
+            var content = this.$$(id);
+            content.toggle();
+          }
+          i++;
+        }
       }
     });
   </script>
