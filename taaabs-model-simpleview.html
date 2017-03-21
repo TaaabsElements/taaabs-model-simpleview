@@ -52,7 +52,7 @@
     </style>
     <template is="dom-repeat" items="[[_typesWithAttr]]">
       <div id="t_[[index]]" class="title">
-        [[item.id]] <span class="childOf fgDarkBlueH" on-click="_onChildOfClick" on-mouseenter="_onChildOfEnter" on-mouseleave="_onChildOfLeave" >[[item.parentS]]</span>
+        [[item.name]] <span class="childOf fgDarkBlueH" on-click="_onChildOfClick" on-mouseenter="_onChildOfEnter" on-mouseleave="_onChildOfLeave" >[[item.parents]]</span>
         <iron-icon icon="icons:arrow-drop-down" on-click="_onCollapseClick"></iron-icon>
       </div>
       <iron-collapse id="ic_[[index]]">
@@ -114,6 +114,7 @@
           var typeId = types[i]['@id'];
           var tmp_type_with_attr = {
             'id': typeId,
+            'name': this._uriToName(typeId),
             'attrList': [],
           };
           if (types[i].hasSuperObselType)
@@ -122,7 +123,7 @@
           for (var j = 0; j < attributes.length; j++) {
             for (var k = 0; k < attributes[j].hasAttributeObselType.length; k++) {
               if (typeId === attributes[j].hasAttributeObselType[k]) {
-                tmp_type_with_attr.attrList.push(attributes[j]['@id']);
+                tmp_type_with_attr.attrList.push(this._uriToName(attributes[j]['@id']));
               }
             }
           }
@@ -142,7 +143,7 @@
             } else {
               for (var j = 0; j < tree.length; j++) {
                 if (i < max && tree[j].id === tmp_array[i].parent) {
-                  tmp_array[i].parentS = 'child of '+tmp_array[i].parent;
+                  tmp_array[i].parents = 'child of '+tmp_array[i].parent;
                   tree.splice(j, 0, tmp_array[i]);
                   tmp_array.splice(i, 1);
                   max = tmp_array.length;
@@ -202,6 +203,14 @@
             divs[j].appendChild(icon);
           }
         }
+      },
+
+      _uriToName: function(uri) {
+        return (uri) ? uri.replace(this.model.uri + '#', '') : uri;
+      },
+
+      _nameToUri: function(name) {
+        return this.model.uri + '#' + name;
       },
 
       _onCollapseClick: function(evt) {
