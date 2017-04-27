@@ -53,7 +53,7 @@
     <template is="dom-repeat" items="[[_typesWithAttr]]">
       <div id="t_[[index]]" class="title">
         [[item.name]] <span class="childOf fgDarkBlueH" on-click="_onChildOfClick" on-mouseenter="_onChildOfEnter" on-mouseleave="_onChildOfLeave" >[[item.parents]]</span>
-        <iron-icon icon="icons:arrow-drop-down" on-click="_onCollapseClick"></iron-icon>
+        <iron-icon icon="icons:expand-more" on-click="_onCollapseClick"></iron-icon>
       </div>
       <iron-collapse id="ic_[[index]]">
         <div class="content">

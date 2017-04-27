@@ -17,7 +17,7 @@
   "main": "taaabs-model-simpleview.html",
   "license": "https://github.com/TaaabsElements/taaabs-model-simpleview/LICENSE",
   "dependencies": {
-    "polymer": "polymer/polymer#^1.0.0",
+    "polymer": "polymer/polymer",
     "app-localize-behavior": "PolymerElements/app-localize-behavior",
     "iron-pages": "PolymerElements/iron-collapse",
     "iron-pages": "PolymerElements/iron-icons",
