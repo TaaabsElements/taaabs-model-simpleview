@@ -1,10 +1,10 @@
-<link rel="import" href="../taaabs-themes/taaabs-dark-theme.html">
+<link rel="import" href="../taaabs-themes/taaabs-theme.html">
 <link rel="import" href="../iron-collapse/iron-collapse.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <dom-module id="taaabs-model-simpleview">
   <template>
-    <style include="taaabs-dark-theme"></style>
+    <style include="taaabs-theme"></style>
     <style>
       :host {
         display: block;
@@ -220,8 +220,6 @@
 
         var fc = content.childNodes;
 
-        console.log(fc);
-
         var i = 0;
         while (fc[i].nodeName != 'DIV') {
           i++;
@@ -231,8 +229,6 @@
         var divs = [];
         for (i = 0; i < divs_tmp.length; i++)
           if (divs_tmp[i].nodeName === 'DIV') divs.push(divs_tmp[i]);
-
-        console.log(divs);
 
       },
 
