@@ -17,10 +17,10 @@
   "main": "taaabs-model-simpleview.html",
   "license": "https://github.com/TaaabsElements/taaabs-model-simpleview/LICENSE",
   "dependencies": {
-    "polymer": "polymer/polymer",
-    "app-localize-behavior": "PolymerElements/app-localize-behavior",
-    "iron-pages": "PolymerElements/iron-collapse",
-    "iron-pages": "PolymerElements/iron-icons",
+    "polymer": "Polymer/polymer#<2.*",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior#<2.*",
+    "iron-pages": "PolymerElements/iron-collapse#<2.*",
+    "iron-pages": "PolymerElements/iron-icons#<2.*",
     "taaabs-themes":"TaaabsElements/taaabs-themes"
   },
   "devDependencies": {
